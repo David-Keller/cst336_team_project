@@ -30,6 +30,7 @@ $dbname = "plants";
 
     $water = "";
     $sun = "";
+    $edible = "";
     if(isset($_POST['water3'])) {
         if(!empty($water)){
             $water = $water . ", ";
@@ -75,8 +76,23 @@ $dbname = "plants";
     if(empty($sun)){
         $sun = "'1', '2', '3'";
     }
+      if(isset($_POST['edible2'])) {
+        if(!empty($edible)){
+            $edible = $edible . ", ";
+        }
+        $edible = $edible . "'1'";
+    }
+    if(isset($_POST['edible1'])) {
+        if(!empty($edible)){
+            $edible = $edible . ", ";
+        }
+        $edible = $edible . "'0'";
+    }
     
-    $where = "where water in (" . $water . ") and sun in (" . $sun . ") ";
+     if(empty($edible)){
+        $edible = "'0', '1'";
+    }
+    $where = "where water in (" . $water . ") and sun in (" . $sun . ") and edible in (" . $edible . ")";
     
     
     
@@ -92,7 +108,7 @@ $dbname = "plants";
     }
     
     $sql = "select * from plant_types ". $where . $orderby . ";";
-    
+    echo $sql;
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     
@@ -123,14 +139,19 @@ $dbname = "plants";
             <input type="checkbox" name="sun2" value="yes"/> med sun <br/>
             <input type="checkbox" name="sun1" value="yes"/> low sun <br/>
             
-            <input type="submit" value="Submit"/>
-        </form>
-        
-        
+            <input type="checkbox" name="edible2" value="yes"/> edible <br/>
+            <input type="checkbox" name="edible1" value="yes"/> not edible <br/>
+            
         <select name="orderOptions" form="orderby">
           <option value="aToz">a-z</option>
           <option value="zToa">z-a</option>
         </select>
+            
+            <input type="submit" value="Filter"/>
+        </form>
+        
+        
+
         
         <?php
             echo "<form id = \"fave\" method = \"post\">";
